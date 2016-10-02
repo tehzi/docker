@@ -1,5 +1,7 @@
 FROM 00zi/base-ubuntu12.04
 
+MAINTAINER zi "zi.white.drago@gmail.com"
+
 ENV SRC_DIR=/usr/local/src
 
 RUN utils=" \
@@ -36,6 +38,7 @@ RUN utils=" \
         libreadline6 \
         libc-client2007e \
         libcurl3 \
+        libzip2 \
     " \
     && apt-get install --no-install-recommends -y $php_deps \
     && php_dev_deps=" \
@@ -52,6 +55,8 @@ RUN utils=" \
         libkrb5-dev \
         libmcrypt-dev \
         libreadline6-dev \
+        libzip-dev \
+        autoconf \
     " \
     && apt-get install --no-install-recommends -y $php_dev_deps \
     && ln -s /usr/lib/x86_64-linux-gnu/libjpeg.a /usr/lib/libjpeg.a \
@@ -103,13 +108,22 @@ RUN utils=" \
         --with-openssl \
     && make -j $(nproc) \
     && make install \
+    && pecl install zip \
+    && pecl install timezonedb \
+    && pecl install xdebug-2.2.7 \
     && rm -r /var/lib/apt/lists/* \
     && apt-get purge -y $utils $mysql_dev_deps $php_dev_deps \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf $SRC_DIR/*
 
-# EXPOSE 80:8080
+RUN mkdir /var/log/php
 
-# CMD ["httpd-foreground"]
+COPY php.ini /etc/php
+COPY php-fpm.conf /etc/php
+
+EXPOSE 9003
+EXPOSE 9000
+
+CMD ["php", "-x"]
 
