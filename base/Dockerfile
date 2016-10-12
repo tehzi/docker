@@ -1,5 +1,7 @@
 FROM alpine:3.4
 
+MAINTAINER zi "zi.white.drago@gmail.com"
+
 ENV HOME /root
 
 RUN apk add --no-cache \
