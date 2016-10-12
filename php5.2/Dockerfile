@@ -39,6 +39,7 @@ RUN utils=" \
         libc-client2007e \
         libcurl3 \
         libzip2 \
+        net-tools \
     " \
     && apt-get install --no-install-recommends -y $php_deps \
     && php_dev_deps=" \
@@ -115,9 +116,20 @@ RUN utils=" \
     && apt-get purge -y $utils $mysql_dev_deps $php_dev_deps \
     && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf $SRC_DIR/*
+    && rm -rf $SRC_DIR/* \
+    && mkdir /var/log/php \
+    && mkdir -p /var/www/html
 
-RUN mkdir /var/log/php
+RUN \
+    if ! [ $(getent passwd www-data) ] && ! [ "$(id -u www-data)" == 33 ] && ! [ "$(id -g www-data)" == 33 ]; \
+    then \
+        if [ $(getent passwd 33 | cut -d: -f1) ]; \
+        then \
+            deluser "$(getent passwd 33 | cut -d: -f1)"; \
+        fi; \
+        addgroup www-data -g 33; \
+        adduser -h /var/www/html -S -s /bin/zsh -u 33 -G www-data www-data; \
+    fi
 
 COPY php.ini /etc/php
 COPY php-fpm.conf /etc/php
@@ -125,5 +137,5 @@ COPY php-fpm.conf /etc/php
 EXPOSE 9003
 EXPOSE 9000
 
-CMD ["php", "-x"]
+CMD ["php-cgi", "--fpm"]
 
