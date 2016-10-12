@@ -1,7 +1,5 @@
 FROM 00zi/base
 
-MAINTAINER zi "zi.white.drago@gmail.com"
-
 RUN apk add --no-cache \
         bind \
         && mkdir -p /var/log/bind \
