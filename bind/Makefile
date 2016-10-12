@@ -14,4 +14,6 @@ run:
 	docker run -it --rm $(NAME)
 
 install:
+	docker stop $(CONTAINER_NAME)
+	docker rm $(CONTAINER_NAME)
 	docker run -d -p 53:53/tcp -p 53:53/udp --name=$(CONTAINER_NAME) --restart=always $(NAME)
