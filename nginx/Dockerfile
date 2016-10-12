@@ -16,11 +16,12 @@ RUN apk add --no-cache \
         $needable \
     && git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
     && apk del .deps $needable \
-    && mkdir -p /var/www/html
+    && mkdir -p /var/www/html \
+    && sed -i '/root/s/ash/zsh/g' /etc/passwd
 
 
-RUN sed -i '/root/s/ash/zsh/g' /etc/passwd \
-    && if ! [ $(getent passwd www-data) ] && ! [ "$(id -u www-data)" == 33 ] && ! [ "$(id -g www-data)" == 33 ]; \
+RUN  \
+    if ! [ $(getent passwd www-data) ] && ! [ "$(id -u www-data)" == 33 ] && ! [ "$(id -g www-data)" == 33 ]; \
     then \
         if [ $(getent passwd 33 | cut -d: -f1) ]; \
         then \
