@@ -1,5 +1,7 @@
 FROM ubuntu:12.04.5
 
+MAINTAINER zi "zi.white.drago@gmail.com"
+
 ENV HOME /root
 
 RUN DEBIAN_FRONTEND=noninteractive \

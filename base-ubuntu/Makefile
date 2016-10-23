@@ -10,7 +10,6 @@ build:
 	cp $(ZSHRC_PATH) .
 	cp $(ZSHRC_CUSTOM) .
 	sed -i '/ssh_hosts=/d' zi.zsh
-	sed -i '/zmodload zsh\/pcre/d' zi.zsh
 	docker build --rm -t $(NAME) .
 
 run:

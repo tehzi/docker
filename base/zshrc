@@ -45,7 +45,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git svn mercurial autojump celery command-not-found coffee common-aliases dircycle dirhistory docker encode64 gitfast git_remote_branch node npm debian python ruby sublime sudo symfony2 yii urltools web-search wd zsh-syntax-highlighting cp pass rsync gulp httpie)
+plugins=(git svn mercurial autojump celery command-not-found coffee common-aliases dircycle dirhistory docker encode64 gitfast git_remote_branch node npm debian python ruby sublime sudo symfony2 yii urltools web-search wd zsh-syntax-highlighting cp pass rsync gulp httpie docker-compose)
 
 # ssh-agent
 
