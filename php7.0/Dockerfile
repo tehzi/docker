@@ -3,7 +3,7 @@ FROM 00zi/base
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
-    PHP_VERSION=7.0.13
+    PHP_VERSION=7.0.16
 
 RUN mkdir -p $SRC_DIR \
     && php_deps=" \
