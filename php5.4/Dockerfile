@@ -1,4 +1,4 @@
-FROM 00zi/base
+FROM 00zi/base:alpine-3.4
 
 MAINTAINER zi "zi.white.drago@gmail.com"
 

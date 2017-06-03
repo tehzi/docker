@@ -11,5 +11,5 @@ build:
 # 	docker run -it $(NAME) zsh
 
 run:
-	docker run --name php5.3 -it --rm $(NAME)
+	docker run --name php5.4 -it --rm $(NAME)
 

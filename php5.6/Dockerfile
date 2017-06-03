@@ -1,9 +1,9 @@
-FROM 00zi/base
+FROM 00zi/base:alpine-3.4
 
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
-    PHP_VERSION=5.6.28
+    PHP_VERSION=5.6.30
 
 RUN mkdir -p $SRC_DIR \
     && php_deps=" \

@@ -3,7 +3,7 @@ FROM 00zi/base
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
-    PHP_VERSION=7.0.16
+    PHP_VERSION=7.0.19
 
 RUN mkdir -p $SRC_DIR \
     && php_deps=" \
@@ -17,6 +17,7 @@ RUN mkdir -p $SRC_DIR \
         libjpeg-turbo \
         libpng \
         libxml2 \
+        libzip \
         krb5 \
         openssl \
         readline \
@@ -37,6 +38,7 @@ RUN mkdir -p $SRC_DIR \
         libjpeg-turbo-dev \
         libpng-dev \
         libxml2-dev \
+        libzip-dev \
         krb5-dev \
         openssl-dev \
         pkgconf \
