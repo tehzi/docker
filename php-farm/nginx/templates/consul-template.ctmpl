@@ -1,0 +1,12 @@
+consul {
+    address = "consul:8500"
+}
+
+{{ range services }}{{ range service .Name  }}{{ if .Name | regexMatch "php[0-9]{1,2}-[0-9]{1,2}-9000" }}{{ $name := .Name | replaceAll "-9000" "" }}
+template {
+    source = "/etc/consul-templates/php/{{ $name }}.ctmpl"
+
+    destination = "/etc/nginx/conf.d/{{ $name }}.conf"
+}
+{{ end }}{{ end }}{{ end }}
+

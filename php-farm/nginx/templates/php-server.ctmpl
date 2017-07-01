@@ -1,0 +1,120 @@
+{{ range service "%%SERVICE%%" }}{{ $name := .Name | replaceAll "-9000" "" }}{{ $address := .Address | regexReplaceAll ".[0-9]+$" ".10" }}
+server {
+    listen {{ $address }}:80;
+    server_name furway.ru www.furway.ru;
+    client_max_body_size 600m;
+    charset utf-8;
+    error_page 500 502 503 504  /50x.html;
+    root /var/www/html/{{ $name }};
+    index index.php index.html index.htm;
+    autoindex on;
+    set $domain '';
+    set $dir '';
+    set $path '';
+
+    # access_log /var/log/nginx/access.log variable;
+
+    if ($request_uri ~* '([^?]+)\??([^?]+)?'){
+        set $file $1;
+        set $get  $2;
+    }
+
+    if ($host ~* '^(?:([-a-z0-9_]+)(?=\.)\.)?([.-a-z0-9]+)$'){
+        set $domain     $2;
+        set $subdomain  $1;
+    }
+
+    # if ($host ~* '^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$'){
+    #     set $domain     $1;
+    #     set $subdomain  $domain;
+    # }
+
+    # if ($host ~* '^[-a-z0-9_]+$'){
+    #     set $domain     '127.0.0.1';
+    #     set $subdomain  $host;
+    # }
+
+    if ($domain = 'php52'){
+        set $domain     '127.0.0.1';
+        # set $subdomain  $host;
+    }
+
+    if (-e $realpath_root/$domain){
+        set $dir $realpath_root/$domain/;
+    }
+
+    if (!-e $dir){
+        return 403;
+    }
+
+    if ($subdomain = ''){
+        set $dir    $dir@;
+        set $path   /$domain/@;
+    }
+
+    if ($subdomain != ''){
+        set $dir    $dir$subdomain;
+        set $path   /$domain/$subdomain;
+    }
+
+    # if ($subdomain = '127.0.0.1'){
+    #     set $dir  $dir@;
+    #     set $path /$subdomain/@;
+    # }
+
+    # if ($subdomain ~* '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$'){
+    #     set $dir  $dir;
+    #     set $path /$subdomain;
+    # }
+
+
+    location @scalie {
+        try_files $path/index.php   =404;
+        set $php_script_name '/index.php';
+        fastcgi_pass {{ $name }}:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ $name }}$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $dir;
+        fastcgi_param DOCUMENT_URI $file;
+        fastcgi_param SCRIPT_NAME $php_script_name;
+        include fastcgi_params;
+    }
+
+    location = / {
+        autoindex on;
+        rewrite ^(.*)$ $path$1 break;
+    }
+
+    location / {
+        autoindex on;
+        try_files $uri $uri/ $path$uri $path$uri/ @scalie;
+    }
+
+    location ~* (?:\.hg|\.svn|\.git|\.htaccess|\.htpasswd$) {
+        deny all;
+    }
+
+    location ~* '\.php(?:\?.+)?' {
+        fastcgi_pass {{ $name }}:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ $name }}$fastcgi_script_name;
+        fastcgi_param   DOCUMENT_ROOT   $dir;
+        fastcgi_param   DOCUMENT_URI    $file;
+
+        set $php_script_name $file;
+
+        if ($file = '/'){
+            set $php_script_name '/index.php';
+        }
+
+        fastcgi_param   SCRIPT_NAME $php_script_name;
+        include         fastcgi_params;
+
+        if (-f $dir$fastcgi_script_name){
+            rewrite ^(.*)$  $path$file break;
+        }
+    }
+
+    location = /50x.html {
+        root   html;
+    }
+}
+{{ end }}
