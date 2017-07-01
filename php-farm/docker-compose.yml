@@ -55,10 +55,9 @@ services:
         build: ./nginx
         container_name: nginx
         restart: always
-        # volumes:
-        #     - /home/zi/project/www:/var/www/html
-        #     - /home/zi/project/www/logs/nginx/:/var/log/nginx
-        #     - /home/zi/project:/mnt
+        volumes:
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 80
         networks:
@@ -86,8 +85,8 @@ services:
         container_name: php5-2
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -103,8 +102,8 @@ services:
         container_name: php5-3
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -120,8 +119,8 @@ services:
         container_name: php5-4
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -137,8 +136,8 @@ services:
         container_name: php5-5
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -154,8 +153,8 @@ services:
         container_name: php5-6
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -171,8 +170,8 @@ services:
         container_name: php7-0
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:
@@ -188,8 +187,8 @@ services:
         container_name: php7-1
         restart: always
         volumes:
-            - /home/zi/project/www:/var/www/html
-            - /home/zi/project:/mnt
+            - ${WWW_DIR}:/var/www/html
+            - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
         networks:

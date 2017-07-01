@@ -34,7 +34,7 @@ server {
     #     set $subdomain  $host;
     # }
 
-    if ($domain = 'php52'){
+    if ($domain = '{{ $name | replaceAll "-" "" }}'){
         set $domain     '127.0.0.1';
         # set $subdomain  $host;
     }
