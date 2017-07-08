@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    mariadb:
+        image: 00zi/mariadb
+        container_name: mariadb
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - mysql-date:/var/lib/mysql
+        networks:
+            mysql-net:
+                ipv4_address: 172.18.0.2
+        ports:
+            - '3306:3306'
+        labels:
+            - "SERVICE_NAME=db-mariadb"
+
+volumes:
+    mysql-date:
+
+networks:
+    mysql-net:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.18.0.0/24
