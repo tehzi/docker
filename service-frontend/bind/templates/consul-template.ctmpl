@@ -1,0 +1,17 @@
+consul {
+    address = "consul:8500"
+}
+
+template {
+    source = "/etc/consul-templates/named-additional.ctmpl"
+
+    destination = "/etc/bind/named-additional.conf"
+}
+
+{{ range services }}{{ range service .Name  }}{{ if .Name | regexMatch "php[0-9]{1,2}-[0-9]{1,2}-9000" }}{{ $name := .Name | replaceAll "-9000" "" }}
+template {
+    source = "/etc/consul-templates/zone/{{ $name }}.ctmpl"
+
+    destination = "/var/bind/pri/generated/{{ $name }}.zone"
+}
+{{ end }}{{ end }}{{ end }}

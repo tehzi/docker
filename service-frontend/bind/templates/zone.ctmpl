@@ -1,0 +1,15 @@
+{{ range service "%%SERVICE%%" }}{{ $name := .Name | replaceAll "-9000" "" }}{{ $address := .Address | regexReplaceAll ".[0-9]+$" ".10" }}
+$TTL    604800
+@   IN  SOA %%SERVICE%%.  root.{{ $name }}. (
+                              2     ; Serial
+                         604800     ; Refresh
+                          86400     ; Retry
+                        2419200     ; Expire
+                         604800 )   ; Negative Cache TTL
+;
+
+@   IN  NS      {{ $name }}.
+@   IN  A       {{ $address }}
+www     A       {{ $address }}
+*       A       {{ $address }}
+{{ end }}

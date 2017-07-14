@@ -1,0 +1,6 @@
+#!/bin/sh
+
+sv start consul-template || exit 1
+sv start consul-template-child || exit 1
+sleep 1
+exec /usr/sbin/named -g -u named -c /etc/bind/named.conf

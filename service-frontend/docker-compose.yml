@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+    bind:
+        build: ./bind
+        container_name: bind
+        ports:
+            - "53/udp:53/udp"
+            - "53:53"
+        networks:
+            frontend-net:
+                ipv4_address: 172.20.0.53
+        restart: always
+        depends_on:
+            - registrator
+
+    # haproxy:
+    #     image: 00zi/haproxy
+    #     container_name: haproxy
+    #     restart: always
+    #     ports:
+    #         - "80:80"
+    #     networks:
+    #         - frontend-net
+    #     depends_on:
+    #         - registrator
+
+    consul:
+        image: consul
+        container_name: consul-frontend
+        restart: always
+        command: consul agent
+            -server
+            -data-dir=/consul/data
+            -advertise 172.20.0.101
+            -ui
+            -client 172.20.0.101
+            -bootstrap
+        networks:
+            frontend-net:
+                ipv4_address: 172.20.0.101
+        environment:
+            CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+        volumes:
+            - consul-frontend-date:/consul
+
+    registrator:
+        image: gliderlabs/registrator
+        container_name: registrator-frontend
+        restart: always
+        command: consul://consul:8500
+        depends_on:
+            - consul
+        networks:
+            - frontend-net
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock
+
+volumes:
+    consul-frontend-date:
+
+networks:
+    frontend-net:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.20.0.0/24

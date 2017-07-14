@@ -1,0 +1,6 @@
+{{ range services }}{{ range service .Name  }}{{ if .Name | regexMatch "php[0-9]{1,2}-[0-9]{1,2}-9000" }}{{ $name := .Name | replaceAll "-9000" "" }}
+zone "{{ $name }}" {
+    type master;
+    file "pri/generated/{{ $name }}.zone";
+};
+{{ end }}{{ end }}{{ end }}
