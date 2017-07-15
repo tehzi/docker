@@ -23,6 +23,7 @@ RUN deps=" \
 
 # templates
 ADD templates/* /etc/consul-templates/
+
 # config
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/fastcgi_params /etc/nginx/fastcgi_params
