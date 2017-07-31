@@ -14,16 +14,17 @@ services:
         depends_on:
             - registrator
 
-    # haproxy:
-    #     image: 00zi/haproxy
-    #     container_name: haproxy
-    #     restart: always
-    #     ports:
-    #         - "80:80"
-    #     networks:
-    #         - frontend-net
-    #     depends_on:
-    #         - registrator
+    haproxy:
+        build: ./haproxy
+        container_name: haproxy
+        ports:
+            - "80:80"
+        # restart: always
+        networks:
+            - shared_net
+            - frontend-net
+        depends_on:
+            - registrator
 
     consul:
         image: consul
@@ -45,10 +46,10 @@ services:
             - consul-frontend-date:/consul
 
     registrator:
-        image: gliderlabs/registrator
+        image: gliderlabs/registrator:master
         container_name: registrator-frontend
         restart: always
-        command: consul://consul:8500
+        command: -useIpFromLabel=io.github.tehzi.service-ip consul://consul:8500
         depends_on:
             - consul
         networks:
@@ -65,3 +66,6 @@ networks:
         ipam:
             config:
                 - subnet: 172.20.0.0/24
+    shared_net:
+        external:
+            name: shared_net

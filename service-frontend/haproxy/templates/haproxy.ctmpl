@@ -1,0 +1,39 @@
+global
+    log 127.0.0.1   local0
+    log 127.0.0.1   local1 notice
+    maxconn 30720
+    user www-data
+    group www-data
+    daemon
+
+defaults
+    mode    http
+    option  httplog
+    option  dontlognull
+    option  forwardfor
+    option  contstats
+    option  http-server-close
+    option log-health-checks
+    retries 3
+    option  redispatch
+    timeout connect     5000
+    timeout client      50000
+    timeout server      50000
+
+    # logs
+    log /dev/log local0
+    # log-format {"type":"haproxy","timestamp":%Ts,"http_status":%ST,"http_request":"%r","remote_addr":"%ci","bytes_read":%B,"upstream_addr":"%si","backend_name":"%b","retries":%rc,"bytes_uploaded":%U,"upstream_response_time":"%Tr","upstream_connect_time":"%Tc","session_duration":"%Tt","termination_state":"%ts"}
+
+listen  web
+    bind :80
+    {{ range service "haproxy-farm" }}
+    acl phpcond hdr_reg(host) -i php[0-9]+-[0-9]+\.[a-z0-9][a-z0-9-]{1,61}[a-z0-9]\.[a-z]{2,}$
+    use_backend {{ .Name }}http if phpcond{{ end }}
+
+{{ range service "haproxy-farm" }}
+backend {{ .Name }}http
+    balance roundrobin
+    cookie SERVERID insert nocache indirect
+    option httpclose
+    option forwardfor
+    server Local {{ .Address }}:80 cookie Local{{ end }}
