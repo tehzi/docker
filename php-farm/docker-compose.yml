@@ -1,24 +1,27 @@
 version: '3'
 
 services:
-    # haproxy:
-    #     image: 00zi/haproxy
-    #     container_name: haproxy
-    #     restart: always
-    #     ports:
-    #         - "80:80"
-    #     networks:
-    #         - php5.2-net
-    #         - php5.3-net
-    #         - php5.4-net
-    #         - php5.5-net
-    #         - php5.6-net
-    #         - php7.0-net
-    #         - php7.1-net
-    #     volumes:
-    #         - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-    #     depends_on:
-    #         - registrator
+    haproxy:
+        build: ./haproxy
+        restart: always
+        ports:
+            - 80
+        container_name: haproxy-farm
+        networks:
+            shared_net:
+                ipv4_address: 172.30.0.80
+            php5.2-net:
+            php5.3-net:
+            php5.4-net:
+            php5.5-net:
+            php5.6-net:
+            php7.0-net:
+            php7.1-net:
+        labels:
+            - "SERVICE_NAME=haproxy-farm"
+            - "io.github.tehzi.service-ip=172.30.0.80"
+        depends_on:
+            - registrator
 
     consul:
         image: consul
@@ -40,10 +43,10 @@ services:
             - consul-php-farm-date:/consul
 
     registrator:
-        image: gliderlabs/registrator
+        image: gliderlabs/registrator:master
         container_name: registrator-php-farm
         restart: always
-        command: consul://consul:8500
+        command: -useIpFromLabel=io.github.tehzi.service-ip consul://consul:8500
         depends_on:
             - consul
         networks:
@@ -55,11 +58,11 @@ services:
         build: ./nginx
         container_name: nginx
         restart: always
+        ports:
+            - 80
         volumes:
             - ${WWW_DIR}:/var/www/html
             - ${PROJECT_DIR}:/mnt
-        ports:
-            - 80
         networks:
             php5.2-net:
                 ipv4_address: 172.16.0.10
@@ -237,4 +240,6 @@ networks:
         ipam:
             config:
                 - subnet: 172.16.6.0/24
-
+    shared_net:
+            external:
+                name: shared_net

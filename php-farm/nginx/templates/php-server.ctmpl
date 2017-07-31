@@ -1,11 +1,11 @@
-{{ range service "%%SERVICE%%" }}{{ $name := .Name | replaceAll "-9000" "" }}{{ $address := .Address | regexReplaceAll ".[0-9]+$" ".10" }}
+{{ range service "%%SERVICE%%" }}{{ $address := .Address | regexReplaceAll ".[0-9]+$" ".10" }}
 server {
     listen {{ $address }}:80;
     server_name furway.ru www.furway.ru;
     client_max_body_size 600m;
     charset utf-8;
     error_page 500 502 503 504  /50x.html;
-    root /var/www/html/{{ $name }};
+    root /var/www/html/{{ .Name }};
     index index.php index.html index.htm;
     autoindex on;
     set $domain '';
@@ -24,17 +24,17 @@ server {
         set $subdomain  $1;
     }
 
-    # if ($host ~* '^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$'){
-    #     set $domain     $1;
-    #     set $subdomain  $domain;
-    # }
+    if ($host ~* '^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$'){
+        set $domain     $1;
+        set $subdomain  $domain;
+    }
 
-    # if ($host ~* '^[-a-z0-9_]+$'){
-    #     set $domain     '127.0.0.1';
-    #     set $subdomain  $host;
-    # }
+    if ($host ~* '^(?:([-a-z0-9_]+)(?=\.)\.)?{{ .Name }}\.([a-z0-9][a-z0-9-]{1,61}[a-z0-9]\.[a-z]{2,})$'){
+        set $domain     $2;
+        set $subdomain  $1;
+    }
 
-    if ($domain = '{{ $name }}'){
+    if ($domain = '{{ .Name }}'){
         set $domain     '127.0.0.1';
         # set $subdomain  $host;
     }
@@ -71,8 +71,8 @@ server {
     location @scalie {
         try_files $path/index.php   =404;
         set $php_script_name '/index.php';
-        fastcgi_pass {{ $name }}:9000;
-        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ $name }}$fastcgi_script_name;
+        fastcgi_pass {{ .Name }}:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ .Name }}$fastcgi_script_name;
         fastcgi_param DOCUMENT_ROOT $dir;
         fastcgi_param DOCUMENT_URI $file;
         fastcgi_param SCRIPT_NAME $php_script_name;
@@ -94,8 +94,8 @@ server {
     }
 
     location ~* '\.php(?:\?.+)?' {
-        fastcgi_pass {{ $name }}:9000;
-        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ $name }}$fastcgi_script_name;
+        fastcgi_pass {{ .Name }}:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/{{ .Name }}$fastcgi_script_name;
         fastcgi_param   DOCUMENT_ROOT   $dir;
         fastcgi_param   DOCUMENT_URI    $file;
 
