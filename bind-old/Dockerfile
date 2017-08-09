@@ -13,7 +13,6 @@ COPY named.conf /etc/bind/named.conf
 COPY zones/* /var/bind/pri/
 
 EXPOSE 53
-
 EXPOSE 53/udp
 
 # /usr/sbin/named -f -u named -c /etc/bind/named.conf

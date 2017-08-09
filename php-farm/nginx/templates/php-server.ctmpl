@@ -19,7 +19,7 @@ server {
         set $get  $2;
     }
 
-    if ($host ~* '^(?:([-a-z0-9_]+)(?=\.)\.)?([.-a-z0-9]+).?$'){
+    if ($host ~* '^(?:([-a-z0-9_]+)(?=\.)\.)?([.-a-z0-9]+)\.?$'){
         set $domain     $2;
         set $subdomain  $1;
     }
@@ -66,7 +66,6 @@ server {
     #     set $dir  $dir;
     #     set $path /$subdomain;
     # }
-
 
     location @scalie {
         try_files $path/index.php   =404;

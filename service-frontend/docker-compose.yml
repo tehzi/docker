@@ -10,6 +10,10 @@ services:
         networks:
             frontend-net:
                 ipv4_address: 172.20.0.53
+            shared_net:
+                ipv4_address: 172.30.0.53
+        labels:
+            - "io.github.tehzi.service-ip=172.30.0.53"
         restart: always
         depends_on:
             - registrator

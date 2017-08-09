@@ -1,5 +1,5 @@
 NAME=00zi/bind
-CONTAINER_NAME=bind
+CONTAINER_NAME=bind-old
 ZSHRC_PATH=/home/zi/conf/zsh/zshrc
 ZSHRC_CUSTOM=/home/zi/conf/zsh/zi.zsh
 

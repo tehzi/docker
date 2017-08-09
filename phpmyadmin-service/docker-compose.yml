@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+    nginx:
+        build: ./nginx
+        restart: always
+        volumes:
+            - phpmyadmin:/var/www/html
+        ports:
+            - 80
+        labels:
+            - "SERVICE_NAME=phpmyadmin-service"
+        networks:
+            shared_net:
+        depends_on:
+            - builder
+        dns:
+            172.30.0.53
+    php:
+        image: 00zi/php7.1
+        # build: ./php
+        restart: always
+        volumes:
+            - phpmyadmin:/var/www/html
+        networks:
+            shared_net:
+        depends_on:
+            - builder
+    builder:
+        build: .
+        volumes:
+            - phpmyadmin:/var/www/html
+        networks:
+            shared_net:
+
+volumes:
+    phpmyadmin:
+
+networks:
+    shared_net:
+        external:
+            name: shared_net
