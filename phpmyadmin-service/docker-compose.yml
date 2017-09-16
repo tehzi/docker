@@ -14,11 +14,8 @@ services:
             shared_net:
         depends_on:
             - builder
-        dns:
-            172.30.0.53
     php:
         image: 00zi/php7.1
-        # build: ./php
         restart: always
         volumes:
             - phpmyadmin:/var/www/html
@@ -32,6 +29,10 @@ services:
             - phpmyadmin:/var/www/html
         networks:
             shared_net:
+        environment:
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - HOST=${HOST}
 
 volumes:
     phpmyadmin:

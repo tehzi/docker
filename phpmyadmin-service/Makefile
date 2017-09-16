@@ -9,3 +9,6 @@ build:
 
 run:
 	docker run -it --rm $(NAME)
+
+update:
+	docker-compose down --rmi local --volumes && docker-compose up -d

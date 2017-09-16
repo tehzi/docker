@@ -47,12 +47,13 @@ $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
 /* User used to manipulate with storage */
-$cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = 'root';
+$cfg['Servers'][$i]['user'] = '${DB_USER}';
+$cfg['Servers'][$i]['password'] = '${DB_PASSWORD}';
 
 
-$cfg['Servers'][$i]['controluser'] = 'root';
-$cfg['Servers'][$i]['controlpass'] = 'root';
+$cfg['Servers'][$i]['controluser'] = '${DB_USER}';
+$cfg['Servers'][$i]['controlpass'] = '${DB_PASSWORD}';
+$cfg['Servers'][$i]['host'] = '${HOST}';
 /* Storage database and tables */
 // $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
 // $cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
@@ -65,7 +66,6 @@ $cfg['Servers'][$i]['controlpass'] = 'root';
 // $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
 // $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
 // $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
-$cfg['Servers'][$i]['host'] = 'db-mariadb.service.consul';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['port'] = '3306';

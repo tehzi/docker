@@ -3,12 +3,16 @@ FROM 00zi/base
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
-    VERSION=4.7.3
+    VERSION=4.7.4 \
+    DB_USER=example \
+    DB_PASSWORD=example \
+    HOST=127.0.0.1
 
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz
 LABEL version=$VERSION
 
 ADD config.inc.php /tmp
+ADD entrypoint.sh /
 
 RUN deps=" \
         openssl \
@@ -47,3 +51,5 @@ RUN deps=" \
     && chown -R www-data:www-data /var/www/html \
     && find /var/www/html -type d -exec chmod 750 {} \; \
     && find /var/www/html -type f -exec chmod 640 {} \;
+
+ENTRYPOINT ["/entrypoint.sh"]
