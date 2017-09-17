@@ -1,11 +1,14 @@
 FROM 00zi/base
 
+# http://phpmyadmin-service.service.consul/chk_rel.php?fix_pmadb=1
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
     VERSION=4.7.4 \
     DB_USER=example \
     DB_PASSWORD=example \
+    PMA_USER=example \
+    PMA_PASSWORD=example \
     HOST=127.0.0.1
 
 ENV URL https://files.phpmyadmin.net/phpMyAdmin/${VERSION}/phpMyAdmin-${VERSION}-all-languages.tar.gz

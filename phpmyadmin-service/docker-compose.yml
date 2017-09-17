@@ -32,6 +32,8 @@ services:
         environment:
             - DB_USER=${DB_USER}
             - DB_PASSWORD=${DB_PASSWORD}
+            - PMA_USER=${PMA_USER}
+            - PMA_PASSWORD=${PMA_PASSWORD}
             - HOST=${HOST}
 
 volumes:

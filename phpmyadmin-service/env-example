@@ -1,3 +1,5 @@
-USER=example
-PASSWORD=example
+DB_USER=example
+DB_PASSWORD=example
+PMA_USER=pma
+PMA_PASSWORD=example
 HOST=127.0.0.1
