@@ -10,7 +10,8 @@ services:
         volumes:
             - mysql-date:/var/lib/mysql
         networks:
-            - shared_net
+            shared_net:
+                ipv4_address: 172.30.0.33
         ports:
             - '3306:3306'
         labels:
