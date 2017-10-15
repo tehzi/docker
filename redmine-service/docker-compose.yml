@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+    redmine:
+        image: redmine
+        restart: always
+        volumes:
+            - redmine:/usr/src/redmine/files
+        networks:
+            shared_net:
+        ports:
+            - 8080:80
+        environment:
+            REDMINE_DB_MYSQL: 172.30.0.33
+            REDMINE_DB_USERNAME: redmine
+            REDMINE_DB_PASSWORD: redmine
+            REDMINE_DB_DATABASE: redmine
+            REDMINE_PLUGINS_MIGRATE: 0
+
+volumes:
+    redmine:
+
+networks:
+    shared_net:
+        external:
+            name: shared_net
