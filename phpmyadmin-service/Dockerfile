@@ -4,7 +4,7 @@ FROM 00zi/base
 MAINTAINER zi "zi.white.drago@gmail.com"
 
 ENV SRC_DIR=/usr/local/src \
-    VERSION=4.7.4 \
+    VERSION=4.7.6 \
     DB_USER=example \
     DB_PASSWORD=example \
     PMA_USER=example \
