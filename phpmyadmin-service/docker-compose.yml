@@ -1,11 +1,13 @@
-version: '2'
+version: '3'
 
 services:
     nginx:
-        build: ./nginx
+        container_name: phpmyadmin-nginx
+        image: 00zi/nginx:latest
         restart: always
         volumes:
             - phpmyadmin:/var/www/html
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
         ports:
             - 80
         labels:
@@ -15,6 +17,7 @@ services:
         depends_on:
             - builder
     php:
+        container_name: phpmyadmin-php
         image: 00zi/php7.1
         restart: always
         volumes:
@@ -25,6 +28,7 @@ services:
             - builder
     builder:
         build: .
+        container_name: phpmyadmin-builder
         volumes:
             - phpmyadmin:/var/www/html
         networks:
