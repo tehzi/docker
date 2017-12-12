@@ -6,7 +6,7 @@ services:
         restart: always
         ports:
             - 80
-        container_name: haproxy-farm
+        container_name: php-farm-haproxy
         networks:
             shared_net:
                 ipv4_address: 172.30.0.80
@@ -25,7 +25,7 @@ services:
 
     consul:
         image: consul
-        container_name: consul-php-farm
+        container_name: php-farm-consul
         restart: always
         command: consul agent
             -server
@@ -44,7 +44,7 @@ services:
 
     registrator:
         image: gliderlabs/registrator:master
-        container_name: registrator-php-farm
+        container_name: php-farm-registrator
         restart: always
         command: -useIpFromLabel=io.github.tehzi.service-ip consul://consul:8500
         depends_on:
@@ -56,7 +56,7 @@ services:
 
     nginx:
         build: ./nginx
-        container_name: nginx
+        container_name: php-farm-nginx
         restart: always
         ports:
             - 80
@@ -83,7 +83,7 @@ services:
 
     php5-2:
         image: 00zi/php5.2
-        container_name: php5-2
+        container_name: php-farm-php5-2
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -100,7 +100,7 @@ services:
 
     php5-3:
         image: 00zi/php5.3
-        container_name: php5-3
+        container_name: php-farm-php5-3
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -117,7 +117,7 @@ services:
 
     php5-4:
         image: 00zi/php5.4
-        container_name: php5-4
+        container_name: php-farm-php5-4
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -134,7 +134,7 @@ services:
 
     php5-5:
         image: 00zi/php5.5
-        container_name: php5-5
+        container_name: php-farm-php5-5
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -151,7 +151,7 @@ services:
 
     php5-6:
         image: 00zi/php5.6
-        container_name: php5-6
+        container_name: php-farm-php5-6
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -168,7 +168,7 @@ services:
 
     php7-0:
         image: 00zi/php7.0
-        container_name: php7-0
+        container_name: php-farm-php7-0
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
@@ -185,13 +185,14 @@ services:
 
     php7-1:
         image: 00zi/php7.1
-        container_name: php7-1
+        container_name: php-farm-php7-1
         restart: always
         volumes:
             - ${WWW_DIR}:/var/www/html
             - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
+
         networks:
             php7.1-net:
                 ipv4_address: 172.16.6.71
