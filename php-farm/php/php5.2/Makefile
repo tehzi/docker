@@ -7,9 +7,3 @@ all: build
 build:
 	docker build --rm -t $(NAME) .
 
-# shell:
-# 	docker run -it $(NAME) zsh
-
-run:
-	docker run --name php5.2 -it --rm $(NAME)
-

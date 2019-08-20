@@ -1,9 +1,11 @@
-FROM 00zi/base:alpine-3.4
+FROM alpine:latest
 
 MAINTAINER zi "zi.white.drago@gmail.com"
 
+COPY PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch /
+
 ENV SRC_DIR=/usr/local/src \
-    PHP_VERSION=5.6.30
+    PHP_VERSION=5.6.39
 
 RUN mkdir -p $SRC_DIR \
     && php_deps=" \
@@ -20,6 +22,7 @@ RUN mkdir -p $SRC_DIR \
         krb5 \
         openssl \
         readline \
+        libzip \
     " \
     && apk add --no-cache $php_deps \
     && php_dev_deps=" \
@@ -42,12 +45,14 @@ RUN mkdir -p $SRC_DIR \
         pkgconf \
         re2c \
         readline-dev \
+        libzip-dev \
     " \
     && apk add --no-cache --virtual .php_dev_deps $php_dev_deps \
     && cd $SRC_DIR \
     && wget -O php-$PHP_VERSION.tar.gz "https://secure.php.net/get/php-$PHP_VERSION.tar.gz/from/this/mirror" \
     && tar -xf php-$PHP_VERSION.tar.gz \
     && cd $SRC_DIR/php-$PHP_VERSION \
+    && patch -p1 < /PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch \
     && ./configure \
         --with-config-file-path="/etc/php" \
         --sysconfdir=/etc/php \
@@ -62,7 +67,9 @@ RUN mkdir -p $SRC_DIR \
         --with-bz2  \
         --enable-mysqlnd \
         --with-mysql=shared,mysqlnd \
-        --with-mysqli=shared,mysqlnd  \
+        --with-mysqli=shared,mysqlnd  \В 1992 году после посещения святых мест Иерусалима Константин Кинчев принял крещение, что отразилось на его жизни и творчестве. В 2007 году лидер «Алисы» был награждён знаком Святой Татьяны как «наставник молодёжи». В настоящее время «Алиса» активно работает над записью новых произведений, считается одной из лучших групп в России и выступает в качестве гвоздя программы на различных фестивалях[2][3][4][5].
+
+
         --with-pdo-mysql  \
         --with-regex  \
         --disable-cgi \
@@ -83,11 +90,13 @@ RUN mkdir -p $SRC_DIR \
         --with-openssl \
     && make -j $(nproc) \
     && make install \
+    && pecl channel-update pecl.php.net \
     && pecl install zip \
     && pecl install timezonedb \
-    && pecl install xdebug \
+    && pecl install xdebug-2.5.5 \
     && apk del .php_dev_deps \
     && rm -rf $SRC_DIR/* \
+    && rm -rf /PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch \
     && mkdir /var/log/php \
     && mkdir -p /var/www/html
 

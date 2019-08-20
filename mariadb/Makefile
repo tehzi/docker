@@ -1,6 +1,6 @@
 NAME=00zi/mariadb
-ZSHRC_PATH=/home/zi/conf/zsh/zshrc
-ZSHRC_CUSTOM=/home/zi/conf/zsh/zi.zsh
+#ZSHRC_PATH=/home/zi/conf/zsh/zshrc
+#ZSHRC_CUSTOM=/home/zi/conf/zsh/zi.zsh
 
 .PHONY: all build run
 

@@ -2,7 +2,7 @@ version: '3'
 
 services:
     mariadb:
-        image: 00zi/mariadb
+        image: mariadb
         container_name: mariadb
         restart: always
         environment:
@@ -16,6 +16,19 @@ services:
             - '3306:3306'
         labels:
             - "SERVICE_NAME=db-mariadb"
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        volumes:
+            - /sessions
+        external_links:
+            - mariadb:db
+        networks:
+            shared_net:
+                ipv4_address: 172.30.0.34
 
 volumes:
     mysql-date:
