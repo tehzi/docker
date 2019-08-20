@@ -90,6 +90,9 @@ services:
             - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
+            - 9003
+        extra_hosts:
+          - "php52:172.16.0.52"
         networks:
             php5.2-net:
                 ipv4_address: 172.16.0.52
@@ -107,6 +110,9 @@ services:
             - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
+            - 9003
+        extra_hosts:
+            - "php53:172.16.1.53"
         networks:
             php5.3-net:
                 ipv4_address: 172.16.1.53
@@ -192,7 +198,6 @@ services:
             - ${PROJECT_DIR}:/mnt
         ports:
             - 9000
-
         networks:
             php7.1-net:
                 ipv4_address: 172.16.6.71
